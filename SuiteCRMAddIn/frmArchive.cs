@@ -94,10 +94,20 @@ namespace SuiteCRMAddIn
             this.lstViewSearchModules.ItemChecked += new ItemCheckedEventHandler(this.lstViewSearchModules_ItemChecked);
             base.FormClosed += new FormClosedEventHandler(this.frmArchive_FormClosed);
 
-            foreach (MailItem item2 in Globals.ThisAddIn.Application.ActiveExplorer().Selection)
+            if(Globals.ThisAddIn.Application.ActiveWindow() is Explorer)
             {
-                this.txtSearch.Text = this.txtSearch.Text + clsGlobals.GetSMTPEmailAddress(item2) + ",";
+                foreach (MailItem item2 in Globals.ThisAddIn.Application.ActiveExplorer().Selection)
+                {
+                    this.txtSearch.Text = this.txtSearch.Text + clsGlobals.GetSMTPEmailAddress(item2) + ",";
+                }
             }
+            else
+            {
+                MailItem item3 = Globals.ThisAddIn.Application.ActiveInspector().CurrentItem;
+                this.txtSearch.Text = this.txtSearch.Text + clsGlobals.GetSMTPEmailAddress(item3) + ",";
+            }
+
+            
             if (this.txtSearch.Text != string.Empty)
             {
                 string str2 = this.txtSearch.Text.Remove(this.txtSearch.Text.Length - 1, 1);
